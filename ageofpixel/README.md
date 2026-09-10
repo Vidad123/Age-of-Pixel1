@@ -101,8 +101,9 @@ and `database/` sit outside the web root and are also protected by
    Visit that folder's URL; the root entry point automatically opens `public/`.
 2. In the HostForge database manager, create a MySQL database and user, grant
    that user all privileges on the database, select it in phpMyAdmin, then
-   import `database/hostforge_import.sql`. This import does not attempt to
-   create or switch databases, which shared hosting commonly blocks.
+   import `database/hostforge_import.sql`. It is the complete import for both
+   fresh installs and older Age of Pixel databases. It does not create or
+   switch databases, which shared hosting commonly blocks.
 3. Copy `src/config.local.php.example` to `src/config.local.php` and replace
    its database host, name, username, and password with the exact values from
    HostForge. Shared hosts commonly prefix database and user names, so retain
@@ -114,6 +115,23 @@ The same package remains localhost-compatible. When `src/config.local.php` is
 absent, it uses `127.0.0.1`, database `AOP`, user `root`, and an empty password.
 Environment variables (`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`,
 `DB_CHARSET`, and `ADMIN_USERS`) override both sets of file-based values.
+
+### HostForge container settings
+
+When HostForge is set to the **Dockerfile** build type, use the following values
+when this project is inside an `ageofpixel` folder in the repository:
+
+- Dockerfile path: `ageofpixel/Dockerfile`
+- Root directory: leave blank
+- Build context: `ageofpixel`
+- Install command: leave blank
+- Start command: leave blank
+- Port: `80`
+- Health check path: `/api/status.php`
+- Health check port: `80`
+
+The supplied Dockerfile starts PHP 8.2 with Apache and PDO MySQL, and serves
+only the `public/` directory.
 
 The admin editor stores custom troops, uploaded PNG icons, and painted maps in
 the browser's local storage. Content is immediately available to matches opened
